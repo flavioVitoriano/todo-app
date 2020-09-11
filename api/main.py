@@ -74,7 +74,7 @@ def read_todos(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
 
 @app.post("/token", response_model=schemas.Token)
 async def login_for_access_token(
-    form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+    form_data: schemas.TokenAuth, db: Session = Depends(get_db)
 ):
     user = crud.authenticate_user(db, form_data.email, form_data.password)
     if not user:
@@ -84,7 +84,7 @@ async def login_for_access_token(
             headers={"WWW-Authenticate": "Bearer"},
         )
     access_token_expires = timedelta(
-        minutes=os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES")
+        minutes=int(os.environ.get("ACCESS_TOKEN_EXPIRE_MINUTES"))
     )
     access_token = crud.create_access_token(
         data={"email": user.email}, expires_delta=access_token_expires

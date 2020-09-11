@@ -3,6 +3,7 @@ from passlib.context import CryptContext
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, status
 from typing import Optional
+from database import SessionLocal
 
 import models
 import schemas
