@@ -12,14 +12,16 @@ export default function Logon() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const history = useHistory();
-
   async function handleLogin(e) {
     e.preventDefault();
 
-    //validação na api
-    alert('Falha no Login, tente novamente.');
-
+    api.post('/token', { email, password }).then(() => {
+      // SETAR LOGIN
+      // REDUX OU MOBX DECIDIR
+      alert("Login deu certo!");
+    }).catch((error) => {
+      alert(JSON.stringify(error));
+    });
   }
 
   return (
