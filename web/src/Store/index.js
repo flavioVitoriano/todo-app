@@ -7,5 +7,5 @@ const RootStore = types.model("RootStore", {
 });
 
 export const RootInstance = RootStore.create();
-export const StoreContext = createContext(RootInstance);
-export const useStore = () => useContext(StoreContext);
+export const StoreContext = createContext({ store: RootInstance });
+export const useStore = () => useContext(StoreContext).store;
