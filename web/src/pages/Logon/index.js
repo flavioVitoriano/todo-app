@@ -1,49 +1,55 @@
-import React, { useState } from 'react';
-import { Link ,useHistory } from 'react-router-dom';
+import React from 'react';
+import { Link, useHistory } from 'react-router-dom';
 import { FiLogIn } from 'react-icons/fi';
 
-import api from '../../services/api';
 import './styles.css';
 
 import logoImg from '../../assets/logo.svg';
 import heroesImg from '../../assets/heroes.png';
+import { useForm } from "react-hook-form";
+import { useStore } from "Store";
+import { toast } from "react-toastify";
+
 
 export default function Logon() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const { register, handleSubmit, errors } = useForm({});
+  const store = useStore().loginStore;
+  const routerHistory = useHistory();
 
-  async function handleLogin(e) {
-    e.preventDefault();
 
-    api.post('/token', { email, password }).then(() => {
-      // SETAR LOGIN
-      // REDUX OU MOBX DECIDIR
-      alert("Login deu certo!");
-    }).catch((error) => {
-      alert(JSON.stringify(error));
+  async function handleLogin(values) {
+    store.signin(values).then(() => {
+      if (store.state === "done") {
+        routerHistory.push('/profile');
+      } else {
+        toast("Verifique suas credenciais e tente novamente");
+      }
     });
   }
 
   return (
     <div className="logon-container">
       <section className="form">
-        <img src={logoImg} alt="To-do-App"/>
+        <img src={logoImg} alt="To-do-App" />
 
-        <form onSubmit={handleLogin}>
-          <h1>Faça seu logon</h1>
+        <form onSubmit={handleSubmit(handleLogin)}>
+          <h1>Faça seu login</h1>
 
-          <input 
+          <input
             placeholder="Seu email"
             type="email"
-            value={email}
-            onChange={e => setEmail(e.target.value)}
+            name="email"
+            ref={register({ required: true })}
           />
+          {errors.email && <span>Necessario informar email</span>}
 
-              <input 
+          <input
             placeholder="Sua password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
+            type="password"
+            name="password"
+            ref={register({ required: true })}
           />
+          {errors.password && <span>Necessario informar Senha</span>}
 
           <button className="button" type="submit">Entrar</button>
 
