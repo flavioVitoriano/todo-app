@@ -1,5 +1,5 @@
 import { types, flow } from "mobx-state-tree";
-import api from "services/api";
+import login from "services/api/login";
 
 const LoginStore = types
   .model({
@@ -11,11 +11,11 @@ const LoginStore = types
   .actions((self) => ({
     signin: flow(function* signin(formData) {
       try {
-        const res = yield api.login.signin(formData);
+        const res = yield login.signin(formData);
         self.token = res.data.access_token;
         self.state = "done";
       } catch (error) {
-        console.error("Falhou em fazer login");
+        console.error(error);
         self.state = "error";
       }
     }),

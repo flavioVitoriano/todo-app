@@ -8,18 +8,23 @@ import logoImg from '../../assets/logo.svg';
 import heroesImg from '../../assets/heroes.png';
 import { useForm } from "react-hook-form";
 import { useStore } from "Store";
+import { toast } from "react-toastify";
 
 
 export default function Logon() {
-  const { register, handleSubmit, errors } = useForm();
+  const { register, handleSubmit, errors } = useForm({});
   const store = useStore().loginStore;
   const routerHistory = useHistory();
 
 
   async function handleLogin(values) {
     store.signin(values).then(() => {
-      routerHistory.push('/profile');
-    });   
+      if (store.state === "done") {
+        routerHistory.push('/profile');
+      } else {
+        toast("Verifique suas credenciais e tente novamente");
+      }
+    });
   }
 
   return (
