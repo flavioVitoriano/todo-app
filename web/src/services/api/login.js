@@ -1,5 +1,7 @@
 import api from '.';
 
-export const placeholder = {
+const placeholder = {
     signin: (data) => api.post('/token', data),
 };
+
+export default placeholder;
