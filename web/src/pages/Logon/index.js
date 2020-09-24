@@ -25,7 +25,7 @@ export default function Logon() {
         toast("Verifique suas credenciais e tente novamente");
       }
     });
-  }
+  } 
 
   return (
     <div className="logon-container">
